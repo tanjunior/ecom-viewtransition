@@ -79,3 +79,9 @@ a.transitioning .c-card--album,
 .c-record--album {
   view-transition-name: album-expand;
 }
+
+::view-transition-old(album-expand):not(:only-child),
+::view-transition-new(album-expand):not(:only-child) {
+  animation: none;
+  mix-blend-mode: normal;
+}
