@@ -4,7 +4,7 @@ type RecordProps = {
   imageUrl: string;
 };
 
-export default function Record({ albumId, title, imageUrl }: RecordProps) {
+export default function Record({ title, imageUrl }: RecordProps) {
 
   return (
     <div className="relative mr-32 shadow-xl w-72 md:w-auto c-record">
