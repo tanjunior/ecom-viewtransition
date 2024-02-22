@@ -37,18 +37,15 @@ export default function HomeComponent() {
   }, []);
 
   return (
-      <section className="py-8">
-        <div className="container flex flex-wrap items-center max-w-screen-lg px-6 pt-4 pb-12 mx-auto lg:px-0">
-          <h2 className="mb-12 text-3xl font-bold tracking-tight text-black">
-            Home
-          </h2>
-          <div className="grid w-full grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
-            {products.map((product) => (
-              <Card key={product.id} {...product} />
-            ))}
-          </div>
-        </div>
-        {/* <ScrollRestoration getKey={(location, matches) => location.pathname}/> */}
-      </section>
+    <>
+      <h2 className="mb-12 text-3xl font-bold tracking-tight text-black">
+        Home
+      </h2>
+      <div className="grid w-full grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
+        {products.map((product) => (
+          <Card key={product.id} {...product} />
+        ))}
+      </div>
+    </>
   );
 }
