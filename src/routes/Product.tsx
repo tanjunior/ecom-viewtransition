@@ -5,13 +5,17 @@ import { productLoader } from "../lib/loaders";
 import SuspenseImage from "@/components/SuspenseImage";
 import { Suspense } from "react";
 
-export default function Product() {
+export default function ProductComponent() {
   const params = useParams()
   const {initialData} = useLoaderData() as Awaited<ReturnType<ReturnType<typeof productLoader>>>
   const {data:product} = useSuspenseQuery({
     ...productQuery(params.id!),
     initialData
   })
+
+  if (!product) {
+    return <div>Not found...</div>
+  }
 
   return (
     <section>
