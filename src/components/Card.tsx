@@ -2,19 +2,21 @@ import { Product } from "@/lib/types";
 import { NavLink } from "react-router-dom";
 import SuspenseImage from "./SuspenseImage";
 import { Suspense } from "react";
+import {CircleDashed} from "lucide-react"
 
 export default function Card({ id, category, description, images, price, title }: Product) {
   return (
     <div className="flex flex-col c-card">
       <NavLink
+        preventScrollReset
         to={`/product/${id}`}
         className="text-black hover:text-pink-500"
         unstable_viewTransition
       >
         <div className="relative shadow-md hover:shadow-lg">
-          <Suspense fallback={<div className="size-68">Loading image...</div>}>
+          <Suspense fallback={<div className="flex items-center justify-center text-center size-64 animate-pulse"><CircleDashed className="animate-spin" /></div>}>
             <SuspenseImage
-              className="relative z-10 object-cover rounded-md card-image c-card--album size-68"
+              className="relative z-10 object-cover rounded-md card-image c-card--album size-64"
               src={images[0]}
               alt={title}
             />
