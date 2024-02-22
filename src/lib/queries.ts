@@ -35,7 +35,8 @@ export const productsQuery = () =>
       // return data
       const data = await fetch('https://api.escuelajs.co/api/v1/products')
       .then(res=>res.json())
-      return productsSchema.parse(data)
+      const parse = productsSchema.safeParse(data)
+      return parse.success? parse.data : []
     },
   });
 
@@ -43,9 +44,11 @@ export const productQuery = (id: string) =>
   queryOptions({
     queryKey: ["product", id],
     queryFn: async () => {
-      const data = await fetch(`https://api.escuelajs.co/api/v1/products/${id}`)
-      .then(res=>res.json())
-      return productSchema.parse(data)
+      const response = await fetch(`https://api.escuelajs.co/api/v1/products/${id}`)
+      if (!response.ok) return null
+      const data = await response.json()
+      const parse = productSchema.safeParse(data)
+      return parse.success ? parse.data : null
     },
   });
 
