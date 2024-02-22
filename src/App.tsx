@@ -1,15 +1,10 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./routes/Layout";
-import {
-  Component as HomeComponent,
-  loader as homeLoader,
-} from "./routes/Home";
-import {
-  Component as AlbumComponent,
-  loader as albumLoader,
-} from "./routes/Album";
+import HomeComponent from "./routes/Home";
+import Product from "@/routes/Product"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { homeLoader, productLoader } from "./lib/loaders";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,9 +26,9 @@ const router = createBrowserRouter(
           Component: HomeComponent,
         },
         {
-          path: "album/:id",
-          loader: albumLoader(queryClient),
-          Component: AlbumComponent,
+          path: "product/:id",
+          loader: productLoader(queryClient),
+          Component: Product,
         },
       ],
     },
