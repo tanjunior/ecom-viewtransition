@@ -5,7 +5,7 @@ import { useContext } from "react";
 export default function useScroll() {
   const context = useContext(ScrollContext);
   if (!context) {
-    throw new Error("useScrollContext must be used within a ScrollContextProvider");
+    throw new Error("useScroll must be used within a ScrollContextProvider");
   }
   return context;
 }
