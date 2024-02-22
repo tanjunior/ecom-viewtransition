@@ -1,8 +1,9 @@
 import { loadImage } from "@/lib/utils";
+import { ImgHTMLAttributes } from "react";
 
 export default function SuspenseImage(
-  props: React.ImgHTMLAttributes<HTMLImageElement>
-): JSX.Element {
+  props: ImgHTMLAttributes<HTMLImageElement>
+) {
   loadImage(props.src).read();
   return <img {...props} />;
 }

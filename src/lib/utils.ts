@@ -12,6 +12,8 @@ interface Resource<Payload> {
 
 type status = "pending" | "success" | "error";
 
+type Result = unknown | Error
+
 // this function let us get a new function using the asyncFn we pass
 // this function also receives a payload and return us a resource with
 // that payload assigned as type
@@ -21,7 +23,7 @@ function createResource<Payload>(
   // we start defining our resource is on a pending status
   let status: status = "pending";
   // and we create a variable to store the result
-  let result: any;
+  let result: Result;
   // then we immediately start running the `asyncFn` function
   // and we store the resulting promise
   const promise = asyncFn().then(
@@ -52,7 +54,7 @@ function createResource<Payload>(
           throw result;
         case "success":
           // if it's success we return the result
-          return result;
+          return result as Payload;
       }
     },
   };
@@ -64,7 +66,8 @@ const cache = new Map<string, any>();
 
 // then we create our loadImage function, this function receives the source
 // of the image and returns a resource
-export function loadImage(source: string): Resource<string> {
+export function loadImage(source?: string): Resource<string> {
+  if (!source) return createResource(() => Promise.reject(new Error(`source not provided ${source}`)));
   // here we start getting the resource from the cache
   let resource = cache.get(source);
   // and if it's there we return it immediately
