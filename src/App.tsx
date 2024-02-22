@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouteObject, RouterProvider, createBrowserRouter, redirect } from "react-router-dom";
 import Layout from "./routes/Layout";
 import HomeComponent from "./routes/Home";
 import ProductComponent from "@/routes/Product";
@@ -7,6 +7,9 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { homeLoader, productLoader } from "./lib/loaders";
 import LoginComponent from "./routes/Login";
 import ScrollContextProvider from "./contexts/ScrollContext";
+import RegisterComponent from "./routes/Register";
+import AccountLayout from "./routes/AccountLayout";
+import useAuth from "./hooks/useAuth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +19,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const router = createBrowserRouter([
+const baseRoutes : RouteObject[] = [
   {
     path: "/",
     Component: Layout,
@@ -31,19 +34,83 @@ const router = createBrowserRouter([
         Component: LoginComponent,
       },
       {
+        path: "register",
+        Component: RegisterComponent,
+      },
+      {
         path: "product/:id",
         loader: productLoader(queryClient),
         Component: ProductComponent,
       },
+      {
+        path: "account",
+        element: <Navigate to="/login" state={{from: "/account"}} />,
+      }
     ],
   },
-]);
+]
+
+// const userRoutes : RouteObject[] = baseRoutes
+// userRoutes[0].children!.push(
+//   {
+//     path: "account",
+//     Component: AccountLayout,
+//     children: [
+//       {
+//         index: true,
+//         element: <div>profile</div>,
+//       }
+//     ]
+//   }
+// )
+
+const userRoutes : RouteObject[] = [
+  {
+    path: "/",
+    Component: Layout,
+    children: [
+      {
+        index: true,
+        loader: homeLoader(queryClient),
+        Component: HomeComponent,
+      },
+      {
+        path: "login",
+        Component: LoginComponent,
+      },
+      {
+        path: "register",
+        Component: RegisterComponent,
+      },
+      {
+        path: "product/:id",
+        loader: productLoader(queryClient),
+        Component: ProductComponent,
+      },
+      {
+        path: "account",
+        Component: AccountLayout,
+        children: [
+          {
+            index: true,
+            element: <div>profile</div>,
+          }
+        ]
+      }
+    ],
+  },
+]
+
+const router = createBrowserRouter(baseRoutes);
+const userRouter = createBrowserRouter(userRoutes);
+
 
 export default function App() {
+  const { user } = useAuth()
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollContextProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={user ? userRouter : router} />
       </ScrollContextProvider>
       <ReactQueryDevtools buttonPosition="bottom-right" />
     </QueryClientProvider>
