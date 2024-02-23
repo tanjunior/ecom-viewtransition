@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="container flex px-3 py-8">
         <div className="flex flex-wrap w-full mx-auto">
           <div className="flex w-full">
-            <div className="flex flex-col items-end justify-between w-full px-3 md:px-0 md:flex-row">
+            <div className="flex flex-col justify-between w-full px-3 md:items-end md:px-0 md:flex-row">
               {/* <h3 className="font-bold text-gray-900">About</h3> */}
               <p className="flex flex-col pt-4">
                 This site is built using{" "}
