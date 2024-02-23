@@ -1,41 +1,31 @@
 export default function Footer() {
   return (
-    <footer className="container mx-auto max-w-screen-lg px-6 lg:px-0 flex items-center flex-wrap pt-4 pb-32">
+    <footer className="container flex flex-wrap items-center max-w-screen-lg px-6 pt-4 mx-auto lg:px-0">
       <div className="container flex px-3 py-8">
-        <div className="w-full mx-auto flex flex-wrap">
-          <div className="flex w-full lg:w-1/2">
-            <div className="px-3 md:px-0">
-              <h3 className="font-bold text-gray-900">About</h3>
-              <p className="pt-4">
-                This site is a demo of a React Router SPA using{" "}
-                <strong>React Router 6.17</strong> with the experimental support
-                for the View Transitions API ✨
+        <div className="flex flex-wrap w-full mx-auto">
+          <div className="flex w-full">
+            <div className="flex flex-col justify-between w-full px-3 md:px-0 md:flex-row">
+              {/* <h3 className="font-bold text-gray-900">About</h3> */}
+              <p className="flex flex-col pt-4">
+                This site is built using{" "}
+                <a className="font-medium underline" href="https://reactrouter.com/en/main/hooks/use-view-transition-state">React Router 6 (experimental View Transition API)</a>
+                <a className="font-medium underline" href="https://tanstack.com/query/latest">TanStack Query v5</a>
+                <a className="font-medium underline" href="https://ui.shadcn.com/">shadcn/ui</a>
               </p>
+
               <p className="pt-4">
-                Huge thanks and shout out to original{" "}
+                Made by{" "}
                 <a
-                  href="https://github.com/Charca/astro-records"
+                  href="https://tanjingren.me"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline"
                 >
-                  Astro Records
-                </a>{" "}
-                demo which this is based on 🙌
-              </p>
-              <p className="pt-4">
-                Made with ❤️ by{" "}
-                <a
-                  href="https://twitter.com/brophdawg11"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  Matt Brophy
+                  Tan Jing Ren
                 </a>{" "}
                 (
                 <a
-                  href="https://github.com/brophdawg11/react-router-records"
+                  href="https://github.com/tanjunior/ecom-viewtransition"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline"
