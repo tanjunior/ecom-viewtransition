@@ -1,5 +1,5 @@
 // import { FragmentOf, graphql } from "@/graphql/graphql";
-import { productSchema, productsSchema } from "@/lib/types";
+import { productSchema, productsSchema, usersSchema } from "@/lib/types";
 import { queryOptions } from "@tanstack/react-query";
 
 // import { Client, cacheExchange, fetchExchange } from 'urql';
@@ -52,3 +52,16 @@ export const productQuery = (id: string) =>
     },
   });
 
+export const usersQuery = () =>
+  queryOptions({
+    queryKey: ["users"],
+    queryFn: async () => {
+
+      // const data = await client.query(productsFragment, {}).toPromise().then(res => res.data)
+      // return data
+      const data = await fetch('https://api.escuelajs.co/api/v1/users')
+      .then(res=>res.json())
+      const parse = usersSchema.safeParse(data)
+      return parse.success? parse.data : []
+    },
+  });
