@@ -16,25 +16,29 @@ export const productSchema = z.object({
 export type Product = z.infer<typeof productSchema>;
 export const productsSchema = z.array(productSchema);
 
+export const addressSchema = z.object({
+  city: z.string(),
+  street: z.string(),
+  number: z.number(),
+  zipcode: z.string(),
+  geolocation: z.object({
+    lat: z.string(),
+    long: z.string(),
+  }),
+})
+
+export const nameSchema = z.object({
+  firstname: z.string(),
+  lastname: z.string(),
+})
+
 export const userSchema = z.object({
   id: z.number(),
   email: z.string().email(),
   username: z.string(),
   password: z.string(),
-  name: z.object({
-    firstname: z.string(),
-    lastname: z.string(),
-  }),
-  address: z.object({
-    city: z.string(),
-    street: z.string(),
-    number: z.number(),
-    zipcode: z.string(),
-    geolocation: z.object({
-      lat: z.string(),
-      long: z.string(),
-    }),
-  }),
+  name: nameSchema,
+  address: addressSchema,
   phone: z.string(),
 });
 
