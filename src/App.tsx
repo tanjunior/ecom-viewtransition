@@ -51,20 +51,6 @@ const baseRoutes : RouteObject[] = [
   },
 ]
 
-// const userRoutes : RouteObject[] = baseRoutes
-// userRoutes[0].children!.push(
-//   {
-//     path: "account",
-//     Component: AccountLayout,
-//     children: [
-//       {
-//         index: true,
-//         element: <div>profile</div>,
-//       }
-//     ]
-//   }
-// )
-
 const userRoutes : RouteObject[] = [
   {
     path: "/",
@@ -101,6 +87,7 @@ const userRoutes : RouteObject[] = [
     ],
   },
 ]
+
 
 const router = createBrowserRouter(baseRoutes);
 const userRouter = createBrowserRouter(userRoutes);

@@ -33,8 +33,9 @@ export const productsQuery = () =>
 
       // const data = await client.query(productsFragment, {}).toPromise().then(res => res.data)
       // return data
-      const data = await fetch('https://api.escuelajs.co/api/v1/products')
+      const data = await fetch('https://fakestoreapi.com/products')
       .then(res=>res.json())
+
       const parse = productsSchema.safeParse(data)
       return parse.success? parse.data : []
     },
@@ -44,7 +45,7 @@ export const productQuery = (id: string) =>
   queryOptions({
     queryKey: ["product", id],
     queryFn: async () => {
-      const response = await fetch(`https://api.escuelajs.co/api/v1/products/${id}`)
+      const response = await fetch(`https://fakestoreapi.com/products/${id}`)
       if (!response.ok) return null
       const data = await response.json()
       const parse = productSchema.safeParse(data)
@@ -59,7 +60,7 @@ export const usersQuery = () =>
 
       // const data = await client.query(productsFragment, {}).toPromise().then(res => res.data)
       // return data
-      const data = await fetch('https://api.escuelajs.co/api/v1/users')
+      const data = await fetch('https://fakestoreapi.com/users')
       .then(res=>res.json())
       const parse = usersSchema.safeParse(data)
       return parse.success? parse.data : []

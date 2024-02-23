@@ -2,13 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { userSchema } from "@/lib/types";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,13 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 const registerFormSchema = userSchema
   .omit({
     id: true,
-    role: true,
-    avatar: true,
   })
   .extend({
     confirmPassword: z.string(),
@@ -38,23 +29,29 @@ const registerFormSchema = userSchema
 
 export default function RegisterComponent() {
   const navigate = useNavigate();
-  const [avatar, setAvatar] = useState("");
-
-  async function getRandomAvatar() {
-    const response = await fetch(
-      "https://randomuser.me/api/?inc=picture&noinfo"
-    ).then((response) => response.json());
-    const url = response.results[0].picture.large;
-    setAvatar(url);
-  }
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       email: "",
-      name: "",
+      username: "",
       password: "",
       confirmPassword: "",
+      phone: "",
+      name: {
+        firstname: "",
+        lastname: "",
+      },
+      address: {
+        city: "",
+        street: "",
+        number: "",
+        zipcode: "",
+        geolocation: {
+          lat: "",
+          lng: "",
+        },
+      },
     },
   });
 
@@ -74,9 +71,9 @@ export default function RegisterComponent() {
     // console.log(checkEmailResponse)
     // if (!checkEmailResponse.isAvailable) return form.setError("email", { message: "Email is already taken" })
 
-    const response = await fetch("https://api.escuelajs.co/api/v1/users/", {
+    const response = await fetch("https://fakestoreapi.com/users", {
       method: "POST",
-      body: JSON.stringify({ ...values, avatar }),
+      body: JSON.stringify({ ...values }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -94,26 +91,113 @@ export default function RegisterComponent() {
         Register
       </h2>
       <Card className="w-full">
-        <CardHeader className="items-center justify-center">
-          <Avatar
-            className="size-56"
-            onClick={async () => {
-              await getRandomAvatar();
-            }}
-          >
-            <AvatarImage src={avatar} />
-            <AvatarFallback>Click to get random avatar</AvatarFallback>
-          </Avatar>
-        </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="name"
+                name="name.firstname"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="name.lastname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="address.city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>City</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="address.street"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Street</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="address.number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="address.zipcode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="shadcn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
                       <Input placeholder="shadcn" {...field} />
                     </FormControl>

@@ -33,8 +33,9 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 const loginFormSchema = userSchema.pick({
   password: true,
-  email: true,
+  username: true,
 })
+export type Login = z.infer<typeof loginFormSchema>
 
 export default function LoginComponent() {
   const { initialData } = useLoaderData() as Awaited<
@@ -47,46 +48,24 @@ export default function LoginComponent() {
 
   const {state} = useLocation()
   const navigate = useNavigate()
-  const { setUser } = useAuth()
-  const form = useForm<z.infer<typeof loginFormSchema>>({
+  const { login } = useAuth()
+  const form = useForm<Login>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+  async function onSubmit(values: Login) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     // console.log(values);
 
-    const response = await fetch("https://api.escuelajs.co/api/v1/auth/login", {
-      method: "POST",
-      body: JSON.stringify(values),
-      headers: {
-        "Content-Type": "application/json",
-      }
-    })
-
-    if (response.ok) {
-      const {access_token, refresh_token} = await response.json()
-      localStorage.setItem('access_token', access_token)
-      localStorage.setItem('refresh_token', refresh_token)
-
-      const sessionResponse = await fetch("https://api.escuelajs.co/api/v1/auth/profile", {
-        headers: {
-          "Authorization": `Bearer ${access_token}`
-        }
-      })
-
-      if (sessionResponse.ok) {
-        const user = await sessionResponse.json()
-        setUser(user)
-        if (state?.from) return navigate(state.from)
-        navigate("/")
-      } 
-    }
+    const loggedIn = await login(values)
+    if (!loggedIn) return
+    if (state?.from) return navigate(state.from)
+    navigate("/")
   }
 
   return (
@@ -97,14 +76,14 @@ export default function LoginComponent() {
       <Card className="w-full">
         <CardHeader>
           <Select onValueChange={e => {
-            form.setValue("email", users[parseInt(e)].email)
+            form.setValue("username", users[parseInt(e)].username)
             form.setValue("password", users[parseInt(e)].password)
           }}>
             <SelectTrigger className="w-[180px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {users.map((user, i) => <SelectItem key={user.id} value={i.toString()}>{user.name}({user.role})</SelectItem>)}
+              {users.map((user, i) => <SelectItem key={user.id} value={i.toString()}>{user.username}</SelectItem>)}
             </SelectContent>
           </Select>
         </CardHeader>
@@ -114,12 +93,12 @@ export default function LoginComponent() {
 
               <FormField
                 control={form.control}
-                name="email"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="shadcn" {...field} />
+                      <Input placeholder="shadcn" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

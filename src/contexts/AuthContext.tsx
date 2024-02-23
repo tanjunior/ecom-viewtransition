@@ -1,4 +1,5 @@
 import { User } from "@/lib/types";
+import { Login } from "@/routes/Login";
 import {
   ReactNode,
   createContext,
@@ -8,50 +9,61 @@ import {
   useEffect,
 } from "react";
 
+type Session = Pick<User, 'id' | 'username'>
+
 type AuthContextType = {
-  user: User | null
-  setUser: Dispatch<SetStateAction<User | null>>;
+  user: Session | null;
+  setUser: Dispatch<SetStateAction<Session | null>>;
+  login: (data: Login) => Promise<boolean>;
   logout: () => void;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export default function AuthContextProvider(props: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  
-  useEffect( ()=>{
-    async function getSession() {
-      try {
-        const access_token = localStorage.getItem('access_token')
-        if(!access_token) return
+  const [user, setUser] = useState<Session | null>(null);
 
-        const sessionResponse = await fetch("https://api.escuelajs.co/api/v1/auth/profile", {
-        headers: {
-          "Authorization": `Bearer ${access_token}`
-        }})
-        if (sessionResponse.ok) {
-          const user = await sessionResponse.json()
-          setUser(user)
-        } 
-      } catch(err: unknown) {
-        if (err instanceof Error) {
-          console.log(err.message)
-        }
-      }
-    }
-    getSession()
-  }, [])
-  
+  useEffect(() => {
+    
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const user = decodeJWT(token);
+    setUser(user);
+  }, []);
+
   function logout() {
-
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-    setUser(null)
+    localStorage.removeItem("token");
+    setUser(null);
   }
 
+  function decodeJWT(token: string) {
+    const tokens = token.split(".");
+
+    const data = JSON.parse(atob(tokens[1]));
+    return {id: data.sub, username: data.user}
+  }
+
+  async function login(data: Login): Promise<boolean> {
+    const response = await fetch("https://fakestoreapi.com/auth/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) return false;
+
+    const { token } = await response.json();
+    localStorage.setItem("token", token);
+    const user = decodeJWT(token);
+    setUser(user);
+    return true;
+  }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout }}>
       {props.children}
     </AuthContext.Provider>
   );

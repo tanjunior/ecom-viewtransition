@@ -5,7 +5,9 @@ import { LoaderFunctionArgs } from "react-router-dom"
 
 export function homeLoader(queryClient: QueryClient) {
   return async () => {
-    return {initialData: await queryClient.ensureQueryData(productsQuery())}
+    const initialData = await queryClient.ensureQueryData(productsQuery())
+    // console.log(initialData)
+    return {initialData}
   }
 }
 

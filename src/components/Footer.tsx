@@ -11,7 +11,7 @@ export default function Footer() {
                 <span><a className="font-medium underline" href="https://reactrouter.com/en/main/hooks/use-view-transition-state">React Router 6</a>{" "}with experimental View Transition API</span>
                 <a className="font-medium underline" href="https://tanstack.com/query/latest">TanStack Query v5</a>
                 <a className="font-medium underline" href="https://ui.shadcn.com/">shadcn/ui</a>
-                <a className="font-medium underline" href="https://fakeapi.platzi.com/">Platzi Fake Store API</a>
+                <a className="font-medium underline" href="https://fakestoreapi.com/">Fake Store API</a>
 
                 
               </p>

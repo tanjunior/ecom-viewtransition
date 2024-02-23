@@ -1,11 +1,12 @@
 import Section from './Section'
-import { Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import useAuth from '@/hooks/useAuth'
+import { Button } from '@/components/ui/button'
 
 export default function AccountLayout() {
   return (
     <Section>
-      <div className='flex'>
+      <div className='flex w-full'>
         <AccountSideBar />
         <Outlet />
       </div>
@@ -15,16 +16,11 @@ export default function AccountLayout() {
 
 
 function AccountSideBar() {
-  const {logout} = useAuth()
+  const { logout} = useAuth()
   return (
     <div className='flex flex-col'>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li onClick={() => logout()}>logout</li>
-      </ul>
+        <NavLink to="/account">Profile</NavLink>
+        <Button onClick={() => logout()}>logout</Button>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import useAuth from "@/hooks/useAuth";
+import Icons from "./Icons";
 
 export default function Header() {
   const {user} = useAuth()
@@ -23,10 +23,7 @@ export default function Header() {
           unstable_viewTransition
           style={{ viewTransitionName: "login" }}
         >
-          {user ? <Avatar>
-            <AvatarImage src={user.avatar} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar> : "Login"}
+          {user ? <strong className="flex">{user.username}<Icons.user /></strong> : "Login"}
 
         </Link>
       </div>

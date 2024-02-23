@@ -84,9 +84,9 @@ export function loadImage(source?: string): Resource<string> {
         // and start listening for the load event to resolve the promise
         img.addEventListener("load", () => resolve(source));
         // and also the error event to reject the promise
-        img.addEventListener("error", () =>
-          reject(new Error(`Failed to load image ${source}`))
-        );
+        // img.addEventListener("error", () => {
+        //   // reject(new Error(`Failed to load image ${source}`))
+        // });
       })
   );
   // before finishing we save the new resource in the cache

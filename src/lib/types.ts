@@ -1,46 +1,42 @@
 import { z } from "zod";
 
-export type Product = z.infer<typeof productSchema>;
-
 export const productSchema = z.object({
   id: z.number(),
   title: z.string(),
   price: z.number(),
+  category: z.string(),
   description: z.string(),
-  category: z.object({
-    id: z.number(),
-    name: z.string(),
-    image: z.string().url(),
+  image: z.string().url(),
+  rating: z.object({
+    rate: z.number(),
+    count: z.number(),
   }),
-  images: z.array(z.string()).refine(arr => arr.length > 0, {message: "Product must have at least one image"}).transform(arr => {
-    arr.map(image => {image.replace(/[\\[\]\\"\\']+/g, "")})
-    return filterImages(arr)
-  }),
-})
+});
 
-function filterImages(images: string[]) {
-  //exclude images from certain domains
-  return images.filter(image => {
-    if (image.toLowerCase().includes("placeimg") || image.toLowerCase().includes("google")) return false
-    return z.string().url().safeParse(image).success
-  })
-}
-
-export const productsSchema = z.preprocess(input => {
-  const products = z.array(productSchema).parse(input)
-  return products.filter(product => product.images.length > 0)
-}, z.array(productSchema))
+export type Product = z.infer<typeof productSchema>;
+export const productsSchema = z.array(productSchema);
 
 export const userSchema = z.object({
   id: z.number(),
-  name: z.string(),
-  role: z.enum(["admin", "customer"]).default("customer"),
   email: z.string().email(),
+  username: z.string(),
   password: z.string(),
-  avatar: z.string().url(),
+  name: z.object({
+    firstname: z.string(),
+    lastname: z.string(),
+  }),
+  address: z.object({
+    city: z.string(),
+    street: z.string(),
+    number: z.number(),
+    zipcode: z.string(),
+    geolocation: z.object({
+      lat: z.string(),
+      long: z.string(),
+    }),
+  }),
+  phone: z.string(),
 });
 
-export const usersSchema = z.array(userSchema);
-
-
 export type User = z.infer<typeof userSchema>;
+export const usersSchema = z.array(userSchema);
