@@ -1,10 +1,10 @@
-import { Navigate, RouteObject, RouterProvider, createBrowserRouter, redirect } from "react-router-dom";
+import { Navigate, RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./routes/Layout";
 import HomeComponent from "./routes/Home";
 import ProductComponent from "@/routes/Product";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { homeLoader, productLoader } from "./lib/loaders";
+import { homeLoader, loginLoader, productLoader } from "./lib/loaders";
 import LoginComponent from "./routes/Login";
 import ScrollContextProvider from "./contexts/ScrollContext";
 import RegisterComponent from "./routes/Register";
@@ -31,6 +31,7 @@ const baseRoutes : RouteObject[] = [
       },
       {
         path: "login",
+        loader: loginLoader(queryClient),
         Component: LoginComponent,
       },
       {

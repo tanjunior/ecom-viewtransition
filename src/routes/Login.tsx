@@ -6,8 +6,15 @@ import {
   Card,
   CardContent,
   CardFooter,
+  CardHeader,
 } from "@/components/ui/card"
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,8 +25,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
+import { loginLoader } from "@/lib/loaders";
+import { usersQuery } from "@/lib/queries";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 const loginFormSchema = userSchema.pick({
   password: true,
@@ -27,6 +37,14 @@ const loginFormSchema = userSchema.pick({
 })
 
 export default function LoginComponent() {
+  const { initialData } = useLoaderData() as Awaited<
+    ReturnType<ReturnType<typeof loginLoader>>
+  >;
+  const { data: users } = useSuspenseQuery({
+    ...usersQuery(),
+    initialData,
+  });
+
   const {state} = useLocation()
   const navigate = useNavigate()
   const { setUser } = useAuth()
@@ -77,6 +95,19 @@ export default function LoginComponent() {
         Login
       </h2>
       <Card className="w-full">
+        <CardHeader>
+          <Select onValueChange={e => {
+            form.setValue("email", users[parseInt(e)].email)
+            form.setValue("password", users[parseInt(e)].password)
+          }}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {users.map((user, i) => <SelectItem key={user.id} value={i.toString()}>{user.name}({user.role})</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -113,8 +144,8 @@ export default function LoginComponent() {
             </form>
           </Form>
         </CardContent>
-        <CardFooter>
-          Do not have an account?
+        <CardFooter className="space-x-1">
+          <span>Do not have an account?</span>
           <Link
             to="/register"
             unstable_viewTransition
