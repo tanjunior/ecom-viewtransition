@@ -4,13 +4,16 @@ export default function Footer() {
       <div className="container flex px-3 py-8">
         <div className="flex flex-wrap w-full mx-auto">
           <div className="flex w-full">
-            <div className="flex flex-col justify-between w-full px-3 md:px-0 md:flex-row">
+            <div className="flex flex-col items-end justify-between w-full px-3 md:px-0 md:flex-row">
               {/* <h3 className="font-bold text-gray-900">About</h3> */}
               <p className="flex flex-col pt-4">
                 This site is built using{" "}
-                <a className="font-medium underline" href="https://reactrouter.com/en/main/hooks/use-view-transition-state">React Router 6 (experimental View Transition API)</a>
+                <span><a className="font-medium underline" href="https://reactrouter.com/en/main/hooks/use-view-transition-state">React Router 6</a>{" "}with experimental View Transition API</span>
                 <a className="font-medium underline" href="https://tanstack.com/query/latest">TanStack Query v5</a>
                 <a className="font-medium underline" href="https://ui.shadcn.com/">shadcn/ui</a>
+                <a className="font-medium underline" href="https://fakeapi.platzi.com/">Platzi Fake Store API</a>
+
+                
               </p>
 
               <p className="pt-4">
