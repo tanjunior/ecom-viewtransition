@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { userSchema } from "@/lib/types";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,14 +14,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 
-const registerFormSchema = userSchema
-  .omit({
-    id: true,
-  })
-  .extend({
-    confirmPassword: z.string(),
-  })
-  .refine((value) => value.password === value.confirmPassword, {
+const registerFormSchema = z.object({
+  email: z.string().email(),
+  username: z.string().min(6),
+  password: z.string().min(6),
+  confirmPassword: z.string().min(6),
+  name: z.object({
+    firstname: z.string().min(1),
+    lastname: z.string().min(1),
+  }),
+  address: z.object({
+    city: z.string().min(1),
+    street: z.string().min(1),
+    number: z.string().min(1),
+    zipcode: z.string().min(1),
+    geolocation: z.object({
+      lat: z.string().min(1),
+      long: z.string().min(1),
+    }),
+  }),
+  phone: z.string().min(1),
+}).refine((value) => value.password === value.confirmPassword, {
     path: ["confirmPassword"],
     message: "Passwords do not match",
   });
@@ -45,32 +57,13 @@ export default function RegisterComponent() {
       address: {
         city: "",
         street: "",
-        number: "",
         zipcode: "",
-        geolocation: {
-          lat: "",
-          lng: "",
-        },
-      },
+        number: "",
+      }
     },
   });
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // console.log({...values, avatar});
-
-    // const checkEmailResponse = await fetch("https://api.escuelajs.co/api/v1/users/is-available", {
-    //   method: "POST",
-    //   body: JSON.stringify({ email: values.email }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   }
-    // }).then(response => response.json())
-
-    // console.log(checkEmailResponse)
-    // if (!checkEmailResponse.isAvailable) return form.setError("email", { message: "Email is already taken" })
-
     const response = await fetch("https://fakestoreapi.com/users", {
       method: "POST",
       body: JSON.stringify({ ...values }),
@@ -90,10 +83,11 @@ export default function RegisterComponent() {
       <h2 className="mb-12 text-3xl font-bold tracking-tight text-black">
         Register
       </h2>
-      <Card className="w-full">
+      <Card className="w-full p-6">
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid-cols-2 gap-8 space-y-6 md:space-y-0 md:grid">
+              
               <FormField
                 control={form.control}
                 name="name.firstname"
@@ -101,7 +95,7 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -115,7 +109,7 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -129,7 +123,7 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>City</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -143,7 +137,7 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>Street</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -155,9 +149,9 @@ export default function RegisterComponent() {
                 name="address.number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -169,23 +163,9 @@ export default function RegisterComponent() {
                 name="address.zipcode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Zipcode</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="shadcn" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,7 +179,7 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -213,7 +193,7 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="shadcn" {...field} />
+                      <Input type="email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -227,7 +207,7 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="shadcn" {...field} />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,14 +221,14 @@ export default function RegisterComponent() {
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="shadcn" {...field} />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <Button type="submit">Submit</Button>
+              <Button className="col-span-2" type="submit">Submit</Button>
             </form>
           </Form>
         </CardContent>
