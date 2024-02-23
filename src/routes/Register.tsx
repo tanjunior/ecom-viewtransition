@@ -7,8 +7,8 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-} from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,31 +20,33 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const registerFormSchema = userSchema.omit({
-  id: true,
-  role: true,
-  avatar: true,
-}).extend({
-  confirmPassword: z.string()
-}).refine((value) => value.password === value.confirmPassword, {
-  path: ["confirmPassword"],
-  message: "Passwords do not match",
-});
+const registerFormSchema = userSchema
+  .omit({
+    id: true,
+    role: true,
+    avatar: true,
+  })
+  .extend({
+    confirmPassword: z.string(),
+  })
+  .refine((value) => value.password === value.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
 
 export default function RegisterComponent() {
-  const navigate = useNavigate()
-  const [avatar, setAvatar] = useState("")
-  useEffect(() => {
-    async function getRandomUserImage() {
-      const response = await fetch("https://randomuser.me/api/?inc=picture&noinfo").then(response => response.json())
-      setAvatar(response.results[0].picture.large)
-    }
+  const navigate = useNavigate();
+  const [avatar, setAvatar] = useState("");
 
-    getRandomUserImage()
-  }, [])
-
+  async function getRandomAvatar() {
+    const response = await fetch(
+      "https://randomuser.me/api/?inc=picture&noinfo"
+    ).then((response) => response.json());
+    const url = response.results[0].picture.large;
+    setAvatar(url);
+  }
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -53,10 +55,8 @@ export default function RegisterComponent() {
       name: "",
       password: "",
       confirmPassword: "",
-      username: "",
     },
   });
-  
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     // Do something with the form values.
@@ -73,20 +73,19 @@ export default function RegisterComponent() {
 
     // console.log(checkEmailResponse)
     // if (!checkEmailResponse.isAvailable) return form.setError("email", { message: "Email is already taken" })
-    
+
     const response = await fetch("https://api.escuelajs.co/api/v1/users/", {
       method: "POST",
-      body: JSON.stringify({...values, avatar}),
+      body: JSON.stringify({ ...values, avatar }),
       headers: {
         "Content-Type": "application/json",
-      }
-    })
+      },
+    });
 
     if (response.ok) {
-      form.reset()
-      navigate("/login")
+      form.reset();
+      navigate("/login");
     }
-    
   }
 
   return (
@@ -96,38 +95,25 @@ export default function RegisterComponent() {
       </h2>
       <Card className="w-full">
         <CardHeader className="items-center justify-center">
-          <Avatar className="size-48">
-            <AvatarImage src={avatar}/>
-            <AvatarFallback>CN</AvatarFallback>
+          <Avatar
+            className="size-56"
+            onClick={async () => {
+              await getRandomAvatar();
+            }}
+          >
+            <AvatarImage src={avatar} />
+            <AvatarFallback>Click to get random avatar</AvatarFallback>
           </Avatar>
-
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
-            
-              
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field}/>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
                     <FormControl>
                       <Input placeholder="shadcn" {...field} />
                     </FormControl>
@@ -182,16 +168,17 @@ export default function RegisterComponent() {
             </form>
           </Form>
         </CardContent>
-        <CardFooter>
-          Already have an account?<Link
+        <CardFooter className="space-x-1">
+          <span>Already have an account?</span>
+          <Link
             to="/login"
             unstable_viewTransition
             style={{ viewTransitionName: "register-login" }}
-          >Login</Link>
+          >
+            Login
+          </Link>
         </CardFooter>
       </Card>
-
     </>
-
   );
 }
