@@ -1,3 +1,4 @@
+import { User } from "@/lib/types";
 import {
   ReactNode,
   createContext,
@@ -6,14 +7,6 @@ import {
   type Dispatch,
   useEffect,
 } from "react";
-
-export type User = {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  avatar: string;
-};
 
 type AuthContextType = {
   user: User | null
