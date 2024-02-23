@@ -80,7 +80,7 @@ export default function LoginComponent() {
             form.setValue("password", users[parseInt(e)].password)
           }}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue />
+              <SelectValue placeholder="Select existing user" />
             </SelectTrigger>
             <SelectContent>
               {users.map((user, i) => <SelectItem key={user.id} value={i.toString()}>{user.username}</SelectItem>)}
