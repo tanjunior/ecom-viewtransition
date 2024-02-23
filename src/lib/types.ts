@@ -35,8 +35,12 @@ export const userSchema = z.object({
   id: z.number(),
   name: z.string(),
   role: z.enum(["admin", "customer"]).default("customer"),
-  username: z.string(),
   email: z.string().email(),
   password: z.string(),
   avatar: z.string().url(),
 });
+
+export const usersSchema = z.array(userSchema);
+
+
+export type User = z.infer<typeof userSchema>;
