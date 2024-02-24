@@ -19,6 +19,11 @@ export default function ProductComponent() {
   if (!product) {
     return <div>Not found...</div>;
   }
+  
+  window.scrollTo({
+    top: 0,
+    behavior: "instant"
+  });
 
   return (
     <>

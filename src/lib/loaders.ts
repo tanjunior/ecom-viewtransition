@@ -1,11 +1,13 @@
-import { productQuery, productsQuery, usersQuery } from "@/lib/queries"
+import { categoriesQuery, productQuery, productsQuery, usersQuery } from "@/lib/queries"
 import { QueryClient } from "@tanstack/react-query"
 import { LoaderFunctionArgs } from "react-router-dom"
 
 
 export function homeLoader(queryClient: QueryClient) {
   return async () => {
-    const initialData = await queryClient.ensureQueryData(productsQuery())
+    const categories = await queryClient.ensureQueryData(categoriesQuery())
+    const products = await queryClient.ensureQueryData(productsQuery())
+    const initialData = {categories, products}
     // console.log(initialData)
     return {initialData}
   }

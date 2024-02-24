@@ -66,11 +66,16 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "bob": {
+          "0%, 100%": { transform: 'translateY(0)'},
+          "50%": { transform: 'translateY(-20%)'}
+        }
       },
       animation: {
         "spin-slow": "spin 5s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "cart": "bob 0.4s ease-in-out"
       },
     },
   },
