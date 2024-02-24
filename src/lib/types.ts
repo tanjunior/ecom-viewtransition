@@ -44,3 +44,7 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 export const usersSchema = z.array(userSchema);
+
+export const categorySchema = z.string()
+export type Category = z.infer<typeof categorySchema>
+export const categoriesSchema = z.array(categorySchema)
