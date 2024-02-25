@@ -7,12 +7,18 @@ import { Button } from "./ui/button";
 import { CardContent, Card, CardFooter } from "@/components/ui/card";
 import useCart from "@/hooks/useCart";
 
-export default function ProductCard({ id, image, price, title }: Product) {
+export default function ProductCard(product: Product) {
+  const { id, image, price, title } = product;
   const { addToCart } = useCart();
+
   return (
-    <NavLink to={`/product/${id}`} className="c-card" unstable_viewTransition>
-      <Card className="w-full h-full mx-auto hover:translate-y-[-2px] transition-transform flex flex-col justify-between">
-        <CardContent className="p-4">
+    <Card className="w-full h-full mx-auto hover:translate-y-[-2px] transition-transform flex flex-col justify-between">
+      <CardContent className="p-4">
+        <NavLink
+          to={`/product/${id}`}
+          className="c-card"
+          unstable_viewTransition
+        >
           <div className="grid gap-2.5">
             <Suspense
               fallback={
@@ -30,20 +36,21 @@ export default function ProductCard({ id, image, price, title }: Product) {
             <h6 className="font-semibold line-clamp-2">{title}</h6>
             {/* <p className="text-sm font-italic line-clamp-3">{description}</p> */}
           </div>
-        </CardContent>
-        <CardFooter className="justify-between">
-          <h6 className="font-semibold">${price}</h6>
-          <Button
-            variant="outline"
-            onClick={(e) => {
-              e.preventDefault();
-              addToCart(id, 1);
-            }}
-          >
-            Add to Cart
-          </Button>
-        </CardFooter>
-      </Card>
-    </NavLink>
+        </NavLink>
+      </CardContent>
+      <CardFooter className="justify-between">
+        <h6 className="font-semibold">${price}</h6>
+        <Button
+          variant="outline"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation()
+            addToCart(product, 1);
+          }}
+        >
+          Add to Cart
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

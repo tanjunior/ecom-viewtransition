@@ -1,4 +1,6 @@
 import useAuth from "@/hooks/useAuth";
+import { Product } from "@/lib/types";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Dispatch,
   ReactNode,
@@ -10,15 +12,24 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
-type Cart = {
+type CartProduct = {
   productId: number;
   quantity: number;
-}[];
+};
+
+type Cart = {
+  id: number;
+  userId: number;
+  date: string;
+  products: CartProduct[];
+};
+
+type CartItem = Omit<CartProduct, "productId"> & Product;
 
 export const CartContext = createContext<{
-  cart: Cart;
-  setCart: Dispatch<SetStateAction<Cart>>;
-  addToCart: (id: number, quantity: number) => void;
+  cart: CartItem[];
+  setCart: Dispatch<SetStateAction<CartItem[]>>;
+  addToCart: (product: Product, quantity: number) => void;
 } | null>(null);
 
 export default function CartContextProvider({
@@ -27,7 +38,8 @@ export default function CartContextProvider({
   children: ReactNode;
 }) {
   const { user } = useAuth();
-  const [cart, setCart] = useState<Cart>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!user) {
@@ -35,43 +47,62 @@ export default function CartContextProvider({
       return;
     }
 
+    const products = queryClient.getQueryData<Product[]>(["products"]);
+
     async function getUserCart() {
-      const res = await fetch(`https://fakestoreapi.com/carts/${user!.id}`);
+      const res = await fetch(
+        `https://fakestoreapi.com/carts/user/${user!.id}`
+      );
       if (!res.ok) return setCart([]);
-      const data = await res.json();
-      setCart(data ? data.products : []);
+      const data: Cart[] = await res.json();
+      if (!data || data.length == 0) return setCart([]);
+
+      const cart: CartItem[] = [];
+
+      for (let index = 0; index < data[0].products.length; index++) {
+        const item = data[0].products[index];
+        const product = products?.find(
+          (product) => product.id === item.productId
+        );
+        if (!product) continue;
+        cart.push({ ...product, quantity: item.quantity });
+      }
+      setCart(cart);
     }
 
     getUserCart();
   }, [user]);
 
-  function addToCart(id: number, quantity: number) {
-    if (!user)
+  function addToCart(product: Product, quantity: number) {
+    if (!user) {
       return toast(
         <div>
           "You must be login first!" <Link to={"login"}>Login in now</Link>
         </div>
       );
+    }
     setCart((prev) => {
-      if (prev.length === 0)
+      if (prev.length === 0) {
         return [
           {
-            productId: id,
-            quantity: 1,
+            ...product,
+            quantity,
           },
         ];
+      }
 
-      const exist = prev.find((item) => item.productId == id);
-      if (exist == undefined) {
-        prev.push({
-          productId: id,
-          quantity: 1,
+      const exist = prev.find((item) => item.id == product.id);
+      if (exist === undefined) {
+        const cur = prev.map(item => item)
+        cur.push({
+          ...product,
+          quantity,
         });
-        return prev;
+        return cur;
       }
 
       return prev.map((item) => {
-        if (item.productId == id) item.quantity = item.quantity + quantity;
+        if (item.id == product.id) item.quantity = item.quantity + quantity;
         return item;
       });
     });
