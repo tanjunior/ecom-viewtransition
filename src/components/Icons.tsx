@@ -39,11 +39,13 @@ import {
   MapPin,
   Truck,
   Handshake,
-  BookText
+  BookText,
+  Trash2
 } from "lucide-react"
 
 
 const Icons = {
+  trash: Trash2,
   book: BookText,
   truck: Truck,
   mapPin: MapPin,
