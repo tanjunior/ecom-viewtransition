@@ -49,6 +49,12 @@ const baseRoutes: RouteObject[] = [
       {
         path: "account",
         element: <Navigate to="/login"/>,
+        children: [
+          {
+            path: "*",
+            element: <Navigate to="/login"/>,
+          }
+        ]
       },
     ],
   },
@@ -82,7 +88,7 @@ const userRoutes: RouteObject[] = [
         Component: AccountLayout,
         children: [
           {
-            path: "profile",
+            index: true,
             element: <div>profile</div>,
           },
           {
