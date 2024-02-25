@@ -71,6 +71,7 @@ export default function CartContextProvider({
     }
 
     getUserCart();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   function addToCart(product: Product, quantity: number) {
