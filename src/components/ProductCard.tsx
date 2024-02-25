@@ -3,22 +3,16 @@ import { NavLink } from "react-router-dom";
 import SuspenseImage from "./SuspenseImage";
 import { Suspense } from "react";
 import { CircleDashed } from "lucide-react";
-import { Button } from "./ui/button";
 import { CardContent, Card, CardFooter } from "@/components/ui/card";
-import useCart from "@/hooks/useCart";
+import AddToCartButton from "./AddToCartButton";
 
 export default function ProductCard(product: Product) {
   const { id, image, price, title } = product;
-  const { addToCart } = useCart();
 
   return (
-    <Card className="w-full h-full mx-auto hover:translate-y-[-2px] transition-transform flex flex-col justify-between">
-      <CardContent className="p-4">
-        <NavLink
-          to={`/product/${id}`}
-          className="c-card"
-          unstable_viewTransition
-        >
+    <NavLink to={`/product/${id}`} className="c-card" unstable_viewTransition>
+      <Card className="w-full h-full mx-auto hover:translate-y-[-2px] transition-transform flex flex-col justify-between">
+        <CardContent className="p-4">
           <div className="grid gap-2.5">
             <Suspense
               fallback={
@@ -36,21 +30,12 @@ export default function ProductCard(product: Product) {
             <h6 className="font-semibold line-clamp-2">{title}</h6>
             {/* <p className="text-sm font-italic line-clamp-3">{description}</p> */}
           </div>
-        </NavLink>
-      </CardContent>
-      <CardFooter className="justify-between">
-        <h6 className="font-semibold">${price}</h6>
-        <Button
-          variant="outline"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation()
-            addToCart(product, 1);
-          }}
-        >
-          Add to Cart
-        </Button>
-      </CardFooter>
-    </Card>
+        </CardContent>
+        <CardFooter className="justify-between">
+          <h6 className="font-semibold">${price}</h6>
+          <AddToCartButton product={product} />
+        </CardFooter>
+      </Card>
+    </NavLink>
   );
 }
