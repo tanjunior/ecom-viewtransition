@@ -6,15 +6,55 @@ export default function Footer() {
           <div className="flex w-full">
             <div className="flex flex-col justify-between w-full px-3 md:items-end md:px-0 md:flex-row">
               {/* <h3 className="font-bold text-gray-900">About</h3> */}
-              <p className="flex flex-col pt-4">
+              <div className="flex flex-col pt-4">
                 This site is built using{" "}
-                <span><a className="font-medium underline" href="https://reactrouter.com/en/main/hooks/use-view-transition-state">React Router 6</a>{" "}with experimental View Transition API</span>
-                <a className="font-medium underline" href="https://tanstack.com/query/latest">TanStack Query v5</a>
-                <a className="font-medium underline" href="https://ui.shadcn.com/">shadcn/ui</a>
-                <a className="font-medium underline" href="https://fakestoreapi.com/">Fake Store API</a>
-
-                
-              </p>
+                <div>
+                  <a
+                    className="font-medium underline"
+                    href="https://reactrouter.com/"
+                  >
+                    React Router 6
+                  </a>{" "}
+                  with{" "}
+                  <a
+                    className="font-medium underline"
+                    href="https://reactrouter.com/en/main/hooks/use-view-transition-state"
+                  >
+                    experimental
+                  </a>{" "}
+                  <a
+                    className="font-medium underline"
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API"
+                  >
+                    View Transition API
+                  </a>
+                </div>
+                <div>
+                  <a
+                    className="font-medium underline"
+                    href="https://tanstack.com/query/latest"
+                  >
+                    TanStack Query v5
+                  </a>{" "}
+                  with{" "}
+                  <a className="font-medium underline" href="https://zod.dev/">
+                    Zod
+                  </a>{" "}
+                  for Validated Type-Safe API
+                </div>
+                <a
+                  className="font-medium underline"
+                  href="https://ui.shadcn.com/"
+                >
+                  shadcn/ui
+                </a>
+                <a
+                  className="font-medium underline"
+                  href="https://fakestoreapi.com/"
+                >
+                  Fake Store API
+                </a>
+              </div>
 
               <p className="pt-4">
                 Made by{" "}
