@@ -7,7 +7,7 @@ export default function UserButton() {
 
   return (
     <Link
-      to={user ? "/account" : "/login"}
+      to={user ? "/account/profile" : "/login"}
       unstable_viewTransition
       style={{ viewTransitionName: "login" }}
     >
