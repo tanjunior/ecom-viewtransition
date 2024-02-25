@@ -59,7 +59,7 @@ export default function CartButton() {
         </div>
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button>
+            <Button asChild>
               <Link to="/account/cart">Go to Cart</Link>
             </Button>
           </DrawerClose>
