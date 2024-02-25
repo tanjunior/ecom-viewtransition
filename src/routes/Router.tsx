@@ -82,8 +82,12 @@ const userRoutes: RouteObject[] = [
         Component: AccountLayout,
         children: [
           {
-            index: true,
+            path: "profile",
             element: <div>profile</div>,
+          },
+          {
+            path: "cart",
+            element: <div>cart</div>,
           },
         ],
       },
