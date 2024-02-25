@@ -2,6 +2,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import ProductCard from "./ProductCard";
 import { Category, Product } from "@/lib/types";
 import { useState } from "react";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export default function ProductsList({
   categories,
@@ -10,10 +11,11 @@ export default function ProductsList({
   categories: Category[];
   products: Product[];
 }) {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [filter, setFilter] = useState<Category[]>(categories);
   return (
     <>
-      <div className="space-y-4 md:space-y-6">
+      <div className="w-full space-y-4 md:space-y-6">
         <h2 className="text-lg font-semibold md:text-xl">Product Categories</h2>
         <ToggleGroup
           type="multiple"
@@ -22,6 +24,7 @@ export default function ProductsList({
           onValueChange={setFilter}
           defaultValue={filter}
           className="gap-2 p-2"
+          orientation={isDesktop ? "horizontal" : "vertical"}
         >
           {categories.map((category) => (
             <ToggleGroupItem

@@ -21,7 +21,7 @@ export default function CartButton() {
   return (
     <Drawer direction={isDesktop ? "right" : "bottom"}>
       <DrawerTrigger>
-        <div className="relative h-10">
+        <div className="relative h-8 md:h-10">
           <Icons.cart className="h-full stroke-primary size-auto" />
 
           <Avatar
@@ -58,11 +58,11 @@ export default function CartButton() {
           </div>
         </div>
         <DrawerFooter>
-          <DrawerClose asChild>
-            <Button asChild>
+          <Button asChild>
+            <DrawerClose asChild>
               <Link to="/account/cart">Go to Cart</Link>
-            </Button>
-          </DrawerClose>
+            </DrawerClose>
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
